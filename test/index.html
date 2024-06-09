@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Price Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #chart-container {
+            position: relative;
+            width: 100%;
+            height: 700px;
+        }
+        #chart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #drawing-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Сначала выключаем события мыши */
+        }
+        #controls {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart-container">
+        <div id="chart"></div>
+        <canvas id="drawing-canvas"></canvas>
+    </div>
+    <div id="controls">
+        <button id="play">Play</button>
+        <button id="stop">Stop</button>
+        <button id="toggle-drawing">Toggle Drawing</button>
+    </div>
+
+    <script>
+        let data = [];
+        let chart;
+        let timer;
+        let currentIndex = 0;
+
+        // Переменные для рисования
+        let drawing = false;
+        let isDrawingEnabled = false;
+        let canvas = document.getElementById('drawing-canvas');
+        let ctx = canvas.getContext('2d');
+        let startX, startY;
+
+        async function getBitcoinPrices() {
+            const endTime = Date.now();
+            const startTime = endTime - (1000 * 60 * 1000); // 1000 минут назад
+            const interval = '1m'; // 1 минута
+
+            const url = `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${interval}&startTime=${startTime}&endTime=${endTime}`;
+
+            try {
+                const response = await axios.get(url);
+                return response.data.map(candle => ({
+                    time: new Date(candle[0]),
+                    open: parseFloat(candle[1]),
+                    high: parseFloat(candle[2]),
+                    low: parseFloat(candle[3]),
+                    close: parseFloat(candle[4])
+                }));
+            } catch (error) {
+                console.error('Error fetching data from Binance API', error);
+                return [];
+            }
+        }
+
+        async function renderChart() {
+            data = await getBitcoinPrices();
+
+            var options = {
+                chart: {
+                    type: 'candlestick',
+                    height: 650
+                },
+                series: [{
+                    data: []
+                }],
+                xaxis: {
+                    type: 'datetime'
+                },
+                title: {
+                    text: 'Bitcoin Price',
+                    align: 'left'
+                }
+            };
+
+            chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        }
+
+        function addCandle() {
+            if (currentIndex < data.length) {
+                const seriesData = chart.w.config.series[0].data;
+                seriesData.push({
+                    x: data[currentIndex].time,
+                    y: [data[currentIndex].open, data[currentIndex].high, data[currentIndex].low, data[currentIndex].close]
+                });
+                chart.updateSeries([{ data: seriesData }]);
+                currentIndex++;
+            } else {
+                clearInterval(timer);
+            }
+        }
+
+        document.getElementById('play').addEventListener('click', () => {
+            if (!timer) {
+                timer = setInterval(addCandle, 1000); // 1 секунда
+            }
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            clearInterval(timer);
+            timer = null;
+        });
+
+        document.getElementById('toggle-drawing').addEventListener('click', () => {
+            isDrawingEnabled = !isDrawingEnabled;
+            canvas.style.pointerEvents = isDrawingEnabled ? 'auto' : 'none';
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (isDrawingEnabled) {
+                drawing = true;
+                startX = e.offsetX;
+                startY = e.offsetY;
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (drawing) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (drawing) {
+                drawing = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            canvas.width = document.getElementById('chart-container').clientWidth;
+            canvas.height = document.getElementById('chart-container').clientHeight;
+        });
+
+        // Инициализация размеров canvas
+        canvas.width = document.getElementById('chart-container').clientWidth;
+        canvas.height = document.getElementById('chart-container').clientHeight;
+
+        renderChart();
+    </script>
+</body>
+</html>
