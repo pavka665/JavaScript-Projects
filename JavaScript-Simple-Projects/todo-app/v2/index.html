@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-96">
+        <h1 class="text-2xl font-bold text-center mb-4">To-Do List</h1>
+
+        <form id="todo-form" class="flex mb-4">
+            <input type="text" id="todo-input" placeholder="Enter a task" class="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:ring-blue-500">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Add</button>
+        </form>
+
+        <div class="flex justify-around mb-4">
+            <button id="filter-all" class="filter-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">All</button>
+            <button id="filter-active" class="filter-btn bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Active</button>
+            <button id="filter-completed" class="filter-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Complete</button>
+        </div>
+
+        <ul id="todo-list" class="space-y-2"></ul>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
