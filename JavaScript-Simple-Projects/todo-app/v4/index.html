@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-stone-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-96">
+        <h1 class="text-2xl text-center mb-4">To-Do List</h1>
+
+        <form id="todo-form" class="flex flex-col space-y-2 mb-4">
+            <div class="flex">
+                <input type="text" id="todo-input" placeholder="Enter a task" class="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submin" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-700">Add</button>
+            </div>
+            <div class="flex space-x-2">
+                <input type="date" id="todo-date" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="todo-category" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </form>
+
+        <div class="flex justify-between mb-4">
+            <button id="filter-all" class="filter-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">All</button>
+            <button id="filter-active" class="filter-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Active</button>
+            <button id="filter-completed" class="filter-btn bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">Completed</button>
+        </div>
+
+        <div class="flex justify-between mb-4">
+            <button id="filter-work" class="filter-btn bg-blue-300 text-blue-800 px-4 py-2 rounded hover:bg-blue-400">Work</button>
+            <button id="filter-personal" class="filter-btn bg-green-300 text-green-800 px-4 py-2 rounded hover:bg-green-400">Personal</button>
+            <button id="filter-shopping" class="filter-btn bg-yellow-300 text-yellow-800 px-4 py-2 rounded hover:bg-yellow-400">Shopping</button>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div id="notification" class="text-sm font-medium text-gray-500">Notification</div>
+            <div id="task-count" class="text-sm font-semibold text-gray-700">
+                Total: 0 | Active: 0 | Completed: 0
+            </div>
+        </div>
+
+        <ul id="todo-list" class="space-y-2"></ul>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
