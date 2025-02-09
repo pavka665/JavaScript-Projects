@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-stone-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-2/3 md:w-1/3">
+        <h1 class="text-2xl text-center mb-4">Список Задач</h1>
+
+        <form id="todo-form" class="flex flex-col space-y-2 mb-4">
+            <div class="flex">
+                <input type="text" id="todo-input" placeholder="Введите название задачи" class="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Добавить</button>
+            </div>
+            <div class="flex space-x-2">
+                <input type="date" id="todo-date" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <select id="todo-category" class="flex-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="other">Other</option>
+                </select>
+                <button id="add-category-btn" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Category</button>
+            </div>
+        </form>
+
+        <div class="flex mt-4 mb-2 border-b border-gray-300">Фильтры</div>
+
+        <div class="flex justify-between mb-1">
+            <button id="filter-all" class="flex-1 m-1 filter-btn bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Все</button>
+            <button id="filter-active" class="flex-1 m-1 filter-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Активные</button>
+            <button id="filter-completed" class="flex-1 m-1 filter-btn bg-fuchsia-500 text-white px-4 py-2 rounded hover:bg-fuchsia-600">Законченые</button>
+        </div>
+
+        <div id="filter-categories" class="flex justify-between mb-4">
+            <button id="filter-work" class="filter-btn flex-1 m-1 bg-white border border-gray-900 px-4 py-2 rounded hover:bg-gray-100">Работа</button>
+            <button id="filter-personal" class="filter-btn flex-1 m-1 bg-white border border-gray-900 px-4 py-2 rounded hover:bg-gray-100">Личные</button>
+            <button id="filter-shopping" class="filter-btn flex-1 m-1 bg-white border border-gray-900 px-4 py-2 rounded hover:bg-gray-100">Покупки</button>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div id="task-count" class="text-sm font-semibold text-gray-500">
+                Total: 0 | Active: 0 | Completed: 0
+            </div>
+        </div>
+    
+        <div id="notification-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900/70 hidden">
+            <div class="bg-white rounded-lg shadow-lg p-4 w-1/3">
+                <p id="notification-text" class="text-lg font-medium text-center text-gray-700">Hello</p>
+            </div>
+        </div>
+
+        <!-- Модальное окно добовления категории -->
+         <div id="category-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900/50 hidden">
+            <div class="bg-white rounded-lg shadow-lg p-4 w-1/2">
+                <h2 class="text-xl font-bold text-center mb-4">Добавление новой категории</h2>
+                <input type="text" id="new-category-input" placeholder="Название категории" class="w-full border border-gray-300 rounded px-4 py-2 focus:ouline-none focus:ring-2 focus:ring-blue-500">
+                <div class="flex justify-end mt-4">
+                    <button id="cancel-category-btn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">Отмена</button>
+                    <button id="save-category-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
+                </div>
+            </div>
+         </div>
+    
+        <ul id="todo-list" class="space-y-2"></ul>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
